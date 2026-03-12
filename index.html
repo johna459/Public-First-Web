@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KDJ Doom | Next-Gen IT Solutions</title>
+    <style>
+        /* --- Base & Reset --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            animation: pulse 2s infinite;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #00ffff;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section with Canvas Background --- */
+        #home {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateZ(50px);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            max-width: 600px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            background: #00ffff;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00ffff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 30px #00ffff, 0 0 50px #00ffff;
+        }
+
+        /* --- Sections Common --- */
+        section {
+            padding: 100px 50px;
+            min-height: 100vh;
+        }
+
+        h2.section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* --- 3D Services Cards --- */
+        .services-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            perspective: 1000px; /* 3D effect enabler */
+        }
+
+        .card {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #111, #222);
+        }
+
+        .card-front h3 {
+            font-size: 24px;
+            color: #00ffff;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #00ffff, #0088ff);
+            color: #000;
+            transform: rotateY(180deg);
+        }
+
+        .card-back p {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* --- Animations --- */
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px #00ffff; }
+            50% { text-shadow: 0 0 25px #00ffff, 0 0 10px #00ffff; }
+            100% { text-shadow: 0 0 10px #00ffff; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">KDJ Doom</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <section id="home">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Welcome to KDJ Doom</h1>
+            <p>We are engineering the future. Experience mind-bending digital solutions, smooth experiences, and unparalleled innovation.</p>
+            <button class="btn" onclick="document.getElementById('services').scrollIntoView()">Explore Our Services</button>
+        </div>
+    </section>
+
+    <section id="about" class="reveal">
+        <h2 class="section-title">About Us</h2>
+        <div style="max-width: 800px; margin: auto; text-align: center; font-size: 1.2rem; line-height: 1.8; color: #bbb;">
+            <p>At <strong>KDJ Doom</strong>, we don't just write code; we create digital masterpieces. From cutting-edge web applications to immersive 3D experiences, our team of tech ninjas is dedicated to pushing the boundaries of what's possible on the web.</p>
+        </div>
+    </section>
+
+    <section id="services" class="reveal">
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-container">
+            <div class="card">
+                <div class="card-face card-front">
+                    <h3 style="font-size: 50px; margin-bottom: 20px;">💻</h3>
+                    <h3>Web Development</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>Web Development</h3>
+                    <p style="margin-top: 20px;">High-performance, scalable, and visually stunning web applications tailored to your business needs.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-face card-front">
+                    <h3 style="font-size: 50px; margin-bottom: 20px;">📱</h3>
+                    <h3>App Development</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>App Development</h3>
+                    <p style="margin-top: 20px;">Native and cross-platform mobile apps that provide seamless user experiences on any device.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-face card-front">
+                    <h3 style="font-size: 50px; margin-bottom: 20px;">🎨</h3>
+                    <h3>UI/UX Design</h3>
+                </div>
+                <div class="card-face card-back">
+                    <h3>UI/UX Design</h3>
+                    <p style="margin-top: 20px;">User-centric design thinking that ensures your products are not only beautiful but highly intuitive.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="reveal" style="text-align: center;">
+        <h2 class="section-title">Initiate Protocol</h2>
+        <p style="margin-bottom: 30px; color: #aaa;">Ready to dominate the digital space? Let's talk.</p>
+        <button class="btn" style="background: #ff00ff; box-shadow: 0 0 15px #ff00ff;">Contact KDJ Doom</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 KDJ Doom IT Solutions. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Scroll Reveal Animation
+        const reveals = document.querySelectorAll('.reveal');
+        
+        window.addEventListener('scroll', revealOnScroll);
+        
+        function revealOnScroll() {
+            for (let i = 0; i < reveals.length; i++) {
+                let windowHeight = window.innerHeight;
+                let revealTop = reveals[i].getBoundingClientRect().top;
+                let revealPoint = 150;
+
+                if (revealTop < windowHeight - revealPoint) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        
+        // Trigger once on load
+        revealOnScroll();
+
+        // 2. Interactive Interactive Particle Canvas Background
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        // Mouse position
+        let mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height/80) * (canvas.width/80)
+        }
+
+        window.addEventListener('mousemove',
+            function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            }
+        );
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            // Draw particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#00ffff';
+                ctx.fill();
+            }
+            // Check particle position, mouse position, move particle, draw particle
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // Check collision detection - mouse position / particle position
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size){
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                        this.x += 10;
+                    }
+                    if (mouse.x > this.x && this.x > this.size * 10) {
+                        this.x -= 10;
+                    }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                        this.y += 10;
+                    }
+                    if (mouse.y > this.y && this.y > this.size * 10) {
+                        this.y -= 10;
+                    }
+                }
+                
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        // Create particle array
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1.5;
+                let directionY = (Math.random() * 2) - 1.5;
+                let color = '#00ffff';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Connect particles with lines
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(0, 255, 255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        // Resize event
+        window.addEventListener('resize',
+            function() {
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = ((innerHeight/80) * (innerWidth/80));
+                init();
+            }
+        );
+
+        // Mouse out event
+        window.addEventListener('mouseout',
+            function() {
+                mouse.x = undefined;
+                mouse.y = undefined;
+            }
+        );
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
