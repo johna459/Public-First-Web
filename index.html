@@ -150,7 +150,6 @@
             justify-content: center;
             gap: 40px;
             flex-wrap: wrap;
-            perspective: 1000px; /* 3D effect enabler */
         }
 
         .card {
@@ -160,10 +159,13 @@
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            /* Updated Perspective Fix */
+            transform: perspective(1000px) rotateY(0deg); 
         }
 
         .card:hover {
-            transform: rotateY(180deg);
+            /* Updated Perspective Fix */
+            transform: perspective(1000px) rotateY(180deg); 
         }
 
         .card-face {
@@ -324,7 +326,7 @@
         // Trigger once on load
         revealOnScroll();
 
-        // 2. Interactive Interactive Particle Canvas Background
+        // 2. Interactive Canvas Particle Background
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
